@@ -16,7 +16,7 @@ def db_test():
             return jsonify({
                 "status": "success", 
                 "message": "Veritabanı bağlantısı başarılı!",
-                "version": db_version['version']
+                "version": db_version[0]
             }), 200
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
