@@ -6,7 +6,7 @@ Bu proje, bir otel işletmesinin rezervasyon, konaklama, ödeme ve personel sür
 
 - **Backend:** Flask / Python
 - **Mimari:** Katmanlı Mimari (Entity, Repository, Service, Controller Blueprint yapısı)
-- **Veritabanı:** PostgreSQL / MSSQL (SQLAlchemy ile)
+- **Veritabanı:** PostgreSQL
 - **Kimlik Doğrulama:** JWT (JSON Web Token)
 - **API Belgelendirme ve Test:** Swagger (Flasgger), Postman
 
