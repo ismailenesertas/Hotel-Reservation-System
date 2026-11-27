@@ -2,53 +2,16 @@
 -- ŞEMA KISITLARI TESTİ
 -- Amaç : CHECK, UNIQUE, FOREIGN KEY ve NOT NULL kısıtlarının hatalı veriyi
 --        gerçekten reddettiğini doğrulamak.
--- Çalıştırma:
---   docker cp database/tests/schema_constraints_test.sql otel_postgres_db:/tmp/t.sql
---   docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/t.sql
+-- Çalıştırma (database klasörü konteynere kopyalanır, \ir göreli yolu çözer):
+--   docker cp database/. otel_postgres_db:/tmp/database
+--   docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/tests/schema_constraints_test.sql
 -- Güvenlik: Her şey tek transaction içinde çalışır ve sonda ROLLBACK edilir;
 --           veritabanında kalıcı hiçbir değişiklik olmaz.
 -- Sonuç : Başarısız test olursa betik "BAŞARISIZ" mesajıyla durur.
 -- =============================================================================
 
 BEGIN;
-
--- -----------------------------------------------------------------------------
--- Yardımcı fonksiyonlar (pg_temp: yalnızca bu oturumda var olur)
--- -----------------------------------------------------------------------------
-
--- Verilen SQL'in belirtilen SQLSTATE hata koduyla REDDEDİLMESİNİ bekler.
--- 23514 check_violation, 23505 unique_violation,
--- 23503 foreign_key_violation, 23502 not_null_violation
-CREATE FUNCTION pg_temp.hata_bekle(p_aciklama text, p_sqlstate text, p_sql text)
-RETURNS void LANGUAGE plpgsql AS $$
-DECLARE
-    calisti boolean := false;
-BEGIN
-    BEGIN
-        EXECUTE p_sql;
-        calisti := true;
-    EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE <> p_sqlstate THEN
-            RAISE EXCEPTION 'BAŞARISIZ: % -> beklenen hata %, gelen % (%)',
-                p_aciklama, p_sqlstate, SQLSTATE, SQLERRM;
-        END IF;
-        RAISE NOTICE 'GEÇTİ   : % (reddedildi: %)', p_aciklama, SQLSTATE;
-    END;
-    IF calisti THEN
-        RAISE EXCEPTION 'BAŞARISIZ: % -> hata bekleniyordu ama sorgu çalıştı', p_aciklama;
-    END IF;
-END $$;
-
--- Verilen SQL'in HATASIZ çalışmasını bekler (geçerli veri kabul edilmeli).
-CREATE FUNCTION pg_temp.basari_bekle(p_aciklama text, p_sql text)
-RETURNS void LANGUAGE plpgsql AS $$
-BEGIN
-    EXECUTE p_sql;
-    RAISE NOTICE 'GEÇTİ   : % (kabul edildi)', p_aciklama;
-EXCEPTION WHEN OTHERS THEN
-    RAISE EXCEPTION 'BAŞARISIZ: % -> kabul edilmeliydi ama hata verdi: % (%)',
-        p_aciklama, SQLSTATE, SQLERRM;
-END $$;
+\ir _yardimci.sql
 
 -- -----------------------------------------------------------------------------
 -- Test verisi (yalnızca bu transaction içinde)
