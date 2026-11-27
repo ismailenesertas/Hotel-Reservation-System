@@ -1,21 +1,26 @@
 import psycopg2
-from psycopg2.extras import RealDictCursor
-import os
+from flask import current_app
+
 
 def get_db_connection():
     """
-    PostgreSQL veritabanına bağlantı sağlar.
-    Verileri sözlük (dictionary) yapısında döndürmek için RealDictCursor kullanır.
+    PostgreSQL veritabanına bağlantı açar.
+
+    Bağlantı bilgileri yalnızca uygulama config'inden (app/config.py ->
+    backend/.env) okunur; kodda varsayılan parola yoktur.
+    Bağlantı kurulamazsa hatayı loglar ve None döndürür.
     """
+    cfg = current_app.config
     try:
-        conn = psycopg2.connect(
-            host=os.getenv('DB_HOST', 'localhost'),
-            database=os.getenv('DB_NAME', 'otel_db'),
-            user=os.getenv('DB_USER', 'postgres'),
-            password=os.getenv('DB_PASS', 'postgres'),
-            port=os.getenv('DB_PORT', '5432')
+        return psycopg2.connect(
+            host=cfg["DB_HOST"],
+            port=cfg["DB_PORT"],
+            dbname=cfg["DB_NAME"],
+            user=cfg["DB_USER"],
+            password=cfg["DB_PASS"],
+            connect_timeout=5,  # DB kapalıysa isteği süresiz bekletme
         )
-        return conn
-    except Exception as e:
-        print(f"Veritabanı bağlantı hatası: {e}")
+    except psycopg2.OperationalError as e:
+        # psycopg2 hata mesajı parolayı içermez; ayrıntı yalnızca sunucu loguna yazılır
+        current_app.logger.error("Veritabanı bağlantı hatası: %s", e)
         return None
