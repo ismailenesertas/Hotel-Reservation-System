@@ -65,6 +65,12 @@ docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /
 docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/migrate.sql
 ```
 
+Örnek veri (20 oda, 50 misafir, 200+ rezervasyon; tarihler bugüne göre üretilir). Yalnızca **boş** veritabanında çalışır, mevcut veriyi silmez:
+```powershell
+docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/seed.sql
+docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/tests/seed_kontrol.sql
+```
+
 Veritabanı testleri — her test kendi transaction'ında çalışır ve `ROLLBACK` ile biter, veri bırakmaz:
 ```powershell
 docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/tests/run_all.sql
