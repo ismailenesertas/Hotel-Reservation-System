@@ -16,5 +16,7 @@
 \ir migrations/007_oda_durumu_checkin_checkout_trigger.sql
 \ir migrations/008_temizlik_oda_durumu_trigger.sql
 \ir migrations/009_islem_log_trigger.sql
+\ir migrations/010_view_bugun_giris_cikis.sql
+\ir migrations/011_view_oda_durumu.sql
 
 \echo 'TÜM MIGRATIONLAR UYGULANDI'

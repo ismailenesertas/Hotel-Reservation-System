@@ -16,5 +16,7 @@
 \ir 007_oda_durumu_checkin_checkout_test.sql
 \ir 008_temizlik_oda_durumu_test.sql
 \ir 009_islem_log_test.sql
+\ir 010_view_bugun_giris_cikis_test.sql
+\ir 011_view_oda_durumu_test.sql
 
 \echo '=== TÜM VERİTABANI TESTLERİ GEÇTİ ==='
