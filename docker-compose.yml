@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Proje adı sabit: klasör adı ne olursa olsun aynı volume
 # (hotel-reservation-system_pgdata) kullanılır, veri kaybolmaz.
 name: hotel-reservation-system
