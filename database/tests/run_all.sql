@@ -13,5 +13,8 @@
 \ir 004_sezon_fiyati_cakisma_test.sql
 \ir 005_rezervasyon_cakisma_test.sql
 \ir 006_rezervasyon_kapasite_test.sql
+\ir 007_oda_durumu_checkin_checkout_test.sql
+\ir 008_temizlik_oda_durumu_test.sql
+\ir 009_islem_log_test.sql
 
 \echo '=== TÜM VERİTABANI TESTLERİ GEÇTİ ==='

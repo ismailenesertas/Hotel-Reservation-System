@@ -13,5 +13,8 @@
 \ir migrations/004_sezon_fiyati_cakisma_trigger.sql
 \ir migrations/005_rezervasyon_cakisma_trigger.sql
 \ir migrations/006_rezervasyon_kapasite_trigger.sql
+\ir migrations/007_oda_durumu_checkin_checkout_trigger.sql
+\ir migrations/008_temizlik_oda_durumu_trigger.sql
+\ir migrations/009_islem_log_trigger.sql
 
 \echo 'TÜM MIGRATIONLAR UYGULANDI'
