@@ -9,10 +9,13 @@ services:
     image: postgres:15-alpine
     container_name: otel_postgres_db
     restart: always
+    # Değerler backend/.env'den gelir:
+    #   docker compose --env-file backend/.env up -d
+    # Not: Bu değerler yalnızca volume İLK oluşturulurken uygulanır.
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: otel_db
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:?DB_PASS tanimli degil - docker compose --env-file backend/.env kullanin}
+      POSTGRES_DB: ${DB_NAME:-otel_db}
     ports:
       - "5432:5432"
     volumes:
