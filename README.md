@@ -49,10 +49,25 @@ docker compose --env-file backend/.env up -d --wait
 - Kullanıcı, parola, veritabanı adı ve port `backend/.env` dosyasından okunur. Port yalnızca `127.0.0.1` üzerinden açılır.
 - Parola yalnızca veritabanı volume'ü **ilk** oluşturulurken uygulanır; `.env`'deki parolayı sonradan değiştirmek mevcut veritabanının parolasını değiştirmez.
 
-Şemayı yükleme (**yalnızca ilk kurulumda** — betik mevcut tabloları silip yeniden oluşturur):
+Veritabanı betiklerini konteynere kopyalama (her güncellemeden sonra tekrarlanır):
 ```powershell
-docker cp database/schema.sql otel_postgres_db:/tmp/schema.sql
-docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/schema.sql
+docker exec otel_postgres_db rm -rf /tmp/database
+docker cp database/. otel_postgres_db:/tmp/database
+```
+
+Temel şemayı yükleme (**yalnızca ilk kurulumda** — `schema.sql` mevcut tabloları silip yeniden oluşturur):
+```powershell
+docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/schema.sql
+```
+
+Şema değişikliklerini (migration) uygulama — `database/migrations/` altındaki dosyalar numara sırasıyla çalışır; tekrar çalıştırmak güvenlidir:
+```powershell
+docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/migrate.sql
+```
+
+Veritabanı testleri — her test kendi transaction'ında çalışır ve `ROLLBACK` ile biter, veri bırakmaz:
+```powershell
+docker exec otel_postgres_db psql -U postgres -d otel_db -v ON_ERROR_STOP=1 -f /tmp/database/tests/run_all.sql
 ```
 
 ### 3. Backend (Flask)
