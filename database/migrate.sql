@@ -10,5 +10,8 @@
 \ir migrations/001_durum_degerleri_ascii.sql
 \ir migrations/002_kullanici_tekil_hesap.sql
 \ir migrations/003_konaklama_cikis_kontrolu.sql
+\ir migrations/004_sezon_fiyati_cakisma_trigger.sql
+\ir migrations/005_rezervasyon_cakisma_trigger.sql
+\ir migrations/006_rezervasyon_kapasite_trigger.sql
 
 \echo 'TÜM MIGRATIONLAR UYGULANDI'
